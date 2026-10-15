@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente Híbrido IA+IH | Microsoft Foundry Studio</title>
+  <meta name="description" content="Interface moderna para o Agente Híbrido IA+IH com Matriz Base (Perguntas, 4Rs e Ações Cognitivas) conectado ao Azure AI Foundry.">
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" aria-label="Navegação Lateral">
+      <header class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon-box">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <h1>Agente IA + IH</h1>
+            <span class="brand-tag">Matriz Base • 4Rs</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Agent Status Card -->
+      <section class="agent-status-card" id="agentStatusCard" aria-label="Status do Agente">
+        <div class="agent-meta">
+          <div class="agent-avatar-mini" aria-hidden="true">IA</div>
+          <div>
+            <div class="agent-name-text dynamic-agent-name">Jesus-Sierra</div>
+            <div class="agent-desc-text">Agente Híbrido IA+IH</div>
+          </div>
+        </div>
+        <div class="status-beacon" title="Agente conectado e pronto">
+          <span class="beacon-dot"></span>
+          <span>Online</span>
+        </div>
+      </section>
+
+      <!-- New Chat Button -->
+      <div class="sidebar-action-wrap">
+        <button class="btn-new-chat" id="btnNewChat" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Nova Conversa</span>
+        </button>
+      </div>
+
+      <!-- Quick Matrix Info Box -->
+      <div class="matrix-pill-box" id="btnOpenMatrixModal" title="Clique para ver a Matriz Base">
+        <div class="matrix-pill-header">
+          <span>📐 Matriz Base</span>
+          <span class="matrix-pill-link">Ver Tabela</span>
+        </div>
+        <div class="matrix-pill-tags">
+          <span class="tag-chip">6 Perguntas</span>
+          <span class="tag-chip">4Rs (Dimensões)</span>
+          <span class="tag-chip">6 Ações</span>
+        </div>
+      </div>
+
+      <!-- History List -->
+      <div class="sidebar-section-title">Conversas Recentes</div>
+      <nav class="conversations-list" id="conversationsList" aria-label="Lista de conversas"></nav>
+
+      <!-- Footer Info -->
+      <footer class="sidebar-footer">
+        <div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px;">Microsoft Foundry Endpoint</div>
+          <div class="footer-endpoint-pill" id="agentEndpoint" title="services.ai.azure.com">services.ai.azure.com</div>
+        </div>
+      </footer>
+    </aside>
+
+    <!-- MAIN CHAT INTERFACE -->
+    <main class="main-chat" id="mainChat">
+      <!-- Chat Header -->
+      <header class="chat-header" id="chatHeader">
+        <div class="header-left">
+          <button class="btn-sidebar-toggle" id="btnSidebarToggle" type="button" aria-label="Abrir Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="chat-title-group">
+            <h2>
+              <span class="dynamic-agent-name">Jesus-Sierra</span>
+              <span class="badge-model">IA + IH (4Rs)</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn-header-action" id="btnMatrixModalTop" type="button" title="Ver estrutura da Matriz Base">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span>Matriz Base</span>
+          </button>
+          <button class="btn-header-action" id="btnExportChat" type="button" title="Exportar histórico da conversa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Exportar</span>
+          </button>
+          <button class="btn-header-action" id="btnClearChat" type="button" title="Limpar conversa atual">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span>Limpar</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Messages Area -->
+      <section class="messages-container" id="chatMessages" aria-live="polite">
+        <!-- Welcome Screen (Shown when conversation is empty) -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-avatar-orb">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7.003 7.003 0 0 1 5.07 11H5a1 1 0 0 1 0-2h.07A7.003 7.003 0 0 1 11 3.07V3a1 1 0 0 1 2 0v.07A7.003 7.003 0 0 1 18.93 9H19a1 1 0 0 1 0 2h-.07A7.003 7.003 0 0 1 13 16.93zM12 7a5 5 0 1 0 5 5 5 5 0 0 0-5-5z"/>
+            </svg>
+          </div>
+          <h2>Agente Híbrido IA + IH</h2>
+          <p>
+            Combinação de <strong>Inteligência Artificial</strong> (padrões, velocidade e síntese) com 
+            <strong>Inteligência Humana</strong> (intenção, julgamento e contexto). 
+            Orientado pela <strong>Matriz Base</strong>: Perguntas Contextuais, 4 Dimensões (4Rs) e Ações Cognitivas.
+          </p>
+
+          <div class="suggestions-grid">
+            <article class="suggestion-card" data-prompt="Como melhorar o processo X da área de motores?" tabindex="0">
+              <div class="suggestion-icon">⚙️</div>
+              <div class="suggestion-title">Exemplo: Processo da Área de Motores</div>
+              <div class="suggestion-desc">Aplica as 6 perguntas, 4Rs e recomenda a ação cognitiva ideal</div>
+            </article>
+
+            <article class="suggestion-card" data-prompt="Quero explicar e investigar um desvio no meu setor usando a análise Deveria x Realidade e suas perguntas opostas." tabindex="0">
+              <div class="suggestion-icon">🔍</div>
+              <div class="suggestion-title">Análise de Desvio (Deveria x Realidade)</div>
+              <div class="suggestion-desc">Identifica onde/quando ocorre vs onde/quando não ocorre</div>
+            </article>
+
+            <article class="suggestion-card" data-prompt="Faça um diagnóstico completo nas 4 Dimensões (Recursos, Relacionamentos, Rumo e Resultados) para um projeto de automação." tabindex="0">
+              <div class="suggestion-icon">📊</div>
+              <div class="suggestion-title">Diagnóstico nas 4 Dimensões (4Rs)</div>
+              <div class="suggestion-desc">Avalia falta/sobra de recursos, dependências, direção e entregas</div>
+            </article>
+
+            <article class="suggestion-card" data-prompt="Me ajude a escolher entre as 6 Ações Cognitivas (Multiplicar, Renovar, Deixar como está, Diminuir, Dividir ou Adicionar) para resolver um gargalo operacional." tabindex="0">
+              <div class="suggestion-icon">🧠</div>
+              <div class="suggestion-title">Escolha da Ação Cognitiva</div>
+              <div class="suggestion-desc">Descubra se a solução requer Adicionar, Renovar, Dividir ou Reduzir</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Area -->
+      <footer class="chat-input-area" id="chatInputArea">
+        <div class="input-glass-dock">
+          <textarea
+            id="chatTextarea"
+            class="chat-textarea"
+            rows="1"
+            placeholder="Consulte o Agente IA+IH ou descreva um problema... (Shift + Enter para nova linha)"
+            aria-label="Mensagem para o agente"
+          ></textarea>
+          
+          <div class="input-actions">
+            <button
+              id="btnSend"
+              class="btn-send"
+              type="button"
+              disabled
+              title="Enviar mensagem (Enter)"
+              aria-label="Enviar mensagem"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="input-caption">
+          Metodologia <strong>IA+IH</strong> • 4 Dimensões (Recursos, Relacionamentos, Rumo, Resultados) • Microsoft Azure AI Foundry
+        </div>
+      </footer>
+    </main>
+
+    <!-- MATRIX MODAL -->
+    <div class="modal-overlay" id="matrixModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modalTitle">📐 Matriz Base do Agente IA+IH</h3>
+            <span class="modal-subtitle">Perguntas Contextuais × 6 Ações Cognitivas × 4 Dimensões (4Rs)</span>
+          </div>
+          <button class="btn-close-modal" id="btnCloseModal" type="button" aria-label="Fechar">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="matrix-table-wrap">
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th>Ação Cognitiva</th>
+                  <th>Por que</th>
+                  <th>Como</th>
+                  <th>Quem</th>
+                  <th>O que</th>
+                  <th>Onde</th>
+                  <th>Quando</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1. Multiplicar</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+                <tr>
+                  <td><strong>2. Renovar</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+                <tr>
+                  <td><strong>3. Deixar como está</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+                <tr>
+                  <td><strong>4. Diminuir</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+                <tr>
+                  <td><strong>5. Dividir</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+                <tr>
+                  <td><strong>6. Adicionar</strong></td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                  <td>Recursos, Relacionamentos, Rumo, Resultados</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="matrix-pillars-grid">
+            <div class="pillar-card">
+              <h4>🎯 Análise do Desvio</h4>
+              <p>Comparação sistemática entre <strong>Deveria Ser x Realidade</strong> e suas negativas (onde ocorre vs onde não ocorre; quando ocorre vs quando não ocorre).</p>
+            </div>
+            <div class="pillar-card">
+              <h4>📊 As 4 Dimensões (4Rs)</h4>
+              <p><strong>Recursos</strong> (falta/sobra), <strong>Relacionamentos</strong> (dependências/comunicação), <strong>Rumo</strong> (alinhamento/metas) e <strong>Resultados</strong> (entregas/tempo).</p>
+            </div>
+            <div class="pillar-card">
+              <h4>🤝 Decisão Híbrida IA+IH</h4>
+              <p>A <strong>IA</strong> gera velocidade, síntese e padrões. A <strong>Inteligência Humana (IH)</strong> valida com intenção, contexto, julgamento e decisão final.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" role="alert" aria-live="assertive">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span id="toastMessage">Operação realizada com sucesso.</span>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
